@@ -1,4 +1,5 @@
 package com.sistema.blog.entity;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,6 +23,9 @@ public class Publicacion {
     private String contenido;
 
     @OneToMany(mappedBy = "publicacion", cascade = CascadeType.ALL, orphanRemoval = true)//.ALL - cuando se borre una publicacion se borraran todos los comentarios asociados a ella
-    private Set<Comentario> cometarios = new HashSet<>();//Set - no se pueden repetir los comentarios
+    @Getter @Setter
+    @JsonBackReference//para evitar el bucle infinito. Si no se pone, al hacer un get de publicaciones, se obtiene un json con los comentarios y cada comentario tiene su publicacion y asi sucesivamente
+    private Set<Comentario> comentarios = new HashSet<>();//Set - no se pueden repetir los comentarios
+                                                //listara los comentarios de la publicacion
 
 }

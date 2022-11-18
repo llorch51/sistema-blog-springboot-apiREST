@@ -20,7 +20,7 @@ public class PublicacionController {//metodos que implementaran los servicios de
     private PublicacionService publicacionService;//crear una instancia de la interfaz
     //------------------------------------------------------------------------------------------
 
-    @GetMapping//pagination
+    @GetMapping//pagination. Se le pasa el numero de pagina y el numero de elementos por pagina
     public PublicacionRespuesta listarPublicaciones(
             @RequestParam(value = "pageNo", defaultValue = AppConstantes.NUMERO_DE_PAGINA_POR_DEFECTO, required = false )int numeroDePagina,
             @RequestParam(value = "pageSize", defaultValue = AppConstantes.TAMANO_DE_PAGINA_POR_DEFECTO, required = false)int tamanoDePagina,
@@ -29,12 +29,12 @@ public class PublicacionController {//metodos que implementaran los servicios de
         return publicacionService.obtenerTodasLasPublicaciones(numeroDePagina, tamanoDePagina, ordenarPor, sortDir);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id}")//obtener una publicacion por su id
     public ResponseEntity<PublicacionDTO> obtenerPublicacionPorId(@PathVariable(name = "id") Long id){
         return ResponseEntity.ok(publicacionService.obtenerPublicacionPorId(id));
     }
 
-    @PostMapping
+    @PostMapping//crear una publicacion
     public ResponseEntity<PublicacionDTO> guardarPublicacion(@RequestBody PublicacionDTO publicacionDTO){
         return new ResponseEntity<>(publicacionService.crearPublicacion(publicacionDTO), HttpStatus.CREATED);
     }
@@ -45,7 +45,7 @@ public class PublicacionController {//metodos que implementaran los servicios de
         return new ResponseEntity<>(publicacionRespuesta, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}")//eliminara una publicacion
     public ResponseEntity<String> eliminarPublicacion(@PathVariable(name = "id") Long id){
         publicacionService.eliminarPublicacion(id);
         return new ResponseEntity<>("Publicacion eliminada con exito", HttpStatus.OK);

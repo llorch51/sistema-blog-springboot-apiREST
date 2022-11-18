@@ -5,6 +5,7 @@ import com.sistema.blog.dto.PublicacionRespuesta;
 import com.sistema.blog.entity.Publicacion;
 import com.sistema.blog.exceptions.ResourceNotFoundException;
 import com.sistema.blog.repository.PublicacionRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,6 +18,9 @@ import java.util.stream.Collectors;
 
 @Service
 public class PublicacionServiceImpl implements PublicacionService {
+
+    @Autowired
+    private ModelMapper modelMapper;
     @Autowired//una instancia compartida
     private PublicacionRepository publicacionRepository;//inyecta el repositorio. una instancia de la interfaz
 
@@ -86,8 +90,22 @@ public class PublicacionServiceImpl implements PublicacionService {
     }
 
     //------------------------------------------------------------------------------------------------
+    //*********HECHO CON MODEL MAPPER*********
+    private PublicacionDTO mapearDTO(Publicacion publicacion){//mapea una publicacion a una publicacionDTO
+        PublicacionDTO publicacionDTO = modelMapper.map(publicacion, PublicacionDTO.class);
+
+        return publicacionDTO;
+    }
+
+    private Publicacion mapearEntidad(PublicacionDTO publicacionDTO){//mapea una publicacionDTO a una publicacion
+        Publicacion publicacion = modelMapper.map(publicacionDTO, Publicacion.class);//
+
+        return publicacion;
+    }
+
+    //          *******HECHO A MANO********
     //convertir entidad(instancia de la clase) a DTO
-    private PublicacionDTO mapearDTO(Publicacion publicacion){
+    /*private PublicacionDTO mapearDTO(Publicacion publicacion){
         PublicacionDTO publicacionDTO = new PublicacionDTO();
         publicacionDTO.setId(publicacion.getId());
         publicacionDTO.setTitulo(publicacion.getTitulo());
@@ -95,16 +113,16 @@ public class PublicacionServiceImpl implements PublicacionService {
         publicacionDTO.setContenido(publicacion.getContenido());
 
         return publicacionDTO;
-    }
+    }*/
 
     //convertir DTO a entidad(instancia de la clase)
-    private Publicacion mapearEntidad(PublicacionDTO publicacionDTO){
-        Publicacion publicacion = new Publicacion();
-        //publicacion.setId(publicacionDTO.getId());
-        publicacion.setTitulo(publicacionDTO.getTitulo());
-        publicacion.setDescripcion(publicacionDTO.getDescripcion());
-        publicacion.setContenido(publicacionDTO.getContenido());
-
-        return publicacion;
-    }
+//    private Publicacion mapearEntidad(PublicacionDTO publicacionDTO){
+//        Publicacion publicacion = new Publicacion();
+//        //publicacion.setId(publicacionDTO.getId());
+//        publicacion.setTitulo(publicacionDTO.getTitulo());
+//        publicacion.setDescripcion(publicacionDTO.getDescripcion());
+//        publicacion.setContenido(publicacionDTO.getContenido());
+//
+//        return publicacion;
+//    }
 }
