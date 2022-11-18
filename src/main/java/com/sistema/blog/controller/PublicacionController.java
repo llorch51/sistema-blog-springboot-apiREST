@@ -8,6 +8,7 @@ import com.sistema.blog.utillities.AppConstantes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -35,17 +36,20 @@ public class PublicacionController {//metodos que implementaran los servicios de
         return ResponseEntity.ok(publicacionService.obtenerPublicacionPorId(id));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping//crear una publicacion
     public ResponseEntity<PublicacionDTO> guardarPublicacion(@Valid @RequestBody PublicacionDTO publicacionDTO){
         return new ResponseEntity<>(publicacionService.crearPublicacion(publicacionDTO), HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")//modificara una publicacion
     public ResponseEntity<PublicacionDTO> actualizarPublicacion(@PathVariable(name = "id") Long id,@Valid @RequestBody PublicacionDTO publicacionDTO){
         PublicacionDTO publicacionRespuesta = publicacionService.actualizarPublicacion(id, publicacionDTO);
         return new ResponseEntity<>(publicacionRespuesta, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")//eliminara una publicacion
     public ResponseEntity<String> eliminarPublicacion(@PathVariable(name = "id") Long id){
         publicacionService.eliminarPublicacion(id);
