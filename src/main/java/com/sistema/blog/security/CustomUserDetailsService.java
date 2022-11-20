@@ -16,7 +16,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-public class CustomUserDetailsService implements UserDetailsService {
+public class CustomUserDetailsService implements UserDetailsService {//esta clase se encarga de buscar un usuario en la base de datos
 
     @Autowired
     private UserRepository userRepository;
